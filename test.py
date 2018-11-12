@@ -55,13 +55,13 @@ def giveLabel(y_final,y_tocompare,y_real,y_started):
 
         if y_real[i][0]==1:
             print("H")
-            if len(y_final[i][0][0])==2 and np.argmax(y_final[i][0][0])==0:
+            if len(y_final[i][0][0])==3 and np.argmax(y_final[i][0][0])==1:
                 correct_H=correct_H+1
             else:
                 uncorrect_H=uncorrect_H+1
         if y_real[i][0]==2:
             print("S")
-            if len(y_final[i][0][0])==2 and np.argmax(y_final[i][0][0])==1:
+            if len(y_final[i][0][0])==3 and np.argmax(y_final[i][0][0])==2:
                 correct_S=correct_S+1
             else:
                 uncorrect_S=uncorrect_S+1
@@ -77,6 +77,13 @@ def giveLabel(y_final,y_tocompare,y_real,y_started):
                 correct_V=correct_V+1
             else:
                 uncorrect_V=uncorrect_V+1
+    print("H: ", str(correct_H)+"/"+str(correct_H+uncorrect_H))
+    print("AC: ", str(correct_AC)+"/"+str(correct_AC+uncorrect_AC))
+    print("S: ", str(correct_S)+"/"+str(correct_S+uncorrect_S))
+    print("T: ", str(correct_T)+"/"+str(correct_T+uncorrect_T))
+    print("V: ", str(correct_V)+"/"+str(correct_V+uncorrect_V))
+    print("Total Accuracy: ",str((correct_H+correct_AC+correct_S+correct_T+correct_V)/(correct_H+correct_AC+correct_S+correct_T+correct_V+uncorrect_H+uncorrect_AC+uncorrect_S+uncorrect_T+uncorrect_V)))
+    
     
 
 
@@ -98,15 +105,6 @@ sgd = optimizers.SGD(lr=0.0001, nesterov=True)
 model.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
 
-
-#open branch model
-json_file = open("HS.json","r")
-model_json = json_file.read()
-json_file.close()
-modelbranch1 = model_from_json(model_json)
-modelbranch1.load_weights("HS_w.h5")
-sgd = optimizers.SGD(lr=0.0001, nesterov=True)
-modelbranch1.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
 
 
@@ -153,11 +151,12 @@ for i in range(0,x_test.shape[0]):
     x_temp=np.expand_dims(x_temp, axis=0)
     y_start=model.predict(x_temp)
     y_started[i].append(y_start)
-    if  y_start[0][0]>y_start[0][1]: #somiglianza con AC
-        y_final[i].append(modelbranch2.predict(x_temp))
-    else:
-       y_final[i].append(modelbranch1.predict(x_temp))
-    y_tocompare[i].append(modeltocompare.predict(x_temp))
+    maxposition=np.argmax(y_start[0])
+    if  maxposition==0: #somiglianza con AC
+        y_final[i].append(modelbranch2.predict(x_temp))# predict for ACTV
+    else :
+       y_final[i].append(y_start)
+    y_tocompare[i].append(modeltocompare.predict(x_temp))#previsione sul modello a 5 classi
     y_real[i].append(y_test[i])
 giveLabel(y_final,y_tocompare,y_real,y_started)
 
