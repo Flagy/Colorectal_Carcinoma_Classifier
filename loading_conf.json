@@ -53,6 +53,15 @@
 				"x_test": "dataset/ACTV/ACTV_x_test.npy",
 				"y_test": "dataset/ACTV/ACTV_y_test.npy"
 			}
+		},
+		"ACHS": {
+			"n_classes":3,
+			"paths": {
+				"x_train": "dataset/ACHS/ACHS_x_train.npy",
+				"y_train": "dataset/ACHS/ACHS_y_train.npy",
+				"x_test": "dataset/ACHS/ACHS_x_test.npy",
+				"y_test": "dataset/ACHS/ACHS_y_test.npy"
+			}
 		}
 	}
 }
