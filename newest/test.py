@@ -28,46 +28,46 @@ def giveLabel(y_final,y_tocompare,y_real,y_started):
     correct_V=0
     uncorrect_V=0
     #i dati sul databse 5 sono già presenti, dopo aver allenato sulle 5 classi, è stata fatta l'evaluation
-    y_real=np.load("y_real.npy")
-    y_tocompare=np.load("y_tocompare.npy")
-    y_final=np.load("y_final.npy")
-    y_started=np.load("y_started.npy")
+#    y_real=np.load("y_real.npy")
+#    y_tocompare=np.load("y_tocompare.npy")
+#    y_final=np.load("y_final.npy")
+#    y_started=np.load("y_started.npy")
 
     for i in range(len(y_real)):
-        print("for the "+str(i)+"Image the real label is:")
+        #print("for the "+str(i)+"Image the real label is:")
         if y_real[i][0]==0:
-            print("AC")
-            if len(y_final[i][0][0])==3 and np.argmax(y_final[i][0][0])==0:
+            #print("AC")
+            if np.argmax(y_final[i][0][0])==0:
                 correct_AC=correct_AC+1
             else:
                 uncorrect_AC=uncorrect_AC+1
 
         if y_real[i][0]==1:
-            print("H")
-            if len(y_final[i][0][0])==3 and np.argmax(y_final[i][0][0])==1:
+            #print("H")
+            if np.argmax(y_final[i][0][0])==1:
                 correct_H=correct_H+1
             else:
                 uncorrect_H=uncorrect_H+1
         if y_real[i][0]==2:
-            print("S")
-            if len(y_final[i][0][0])==3 and np.argmax(y_final[i][0][0])==2:
+            #print("S")
+            if np.argmax(y_final[i][0][0])==2:
                 correct_S=correct_S+1
             else:
                 uncorrect_S=uncorrect_S+1
         if y_real[i][0]==3:
-            print("T")
-            if len(y_final[i][0][0])==3 and np.argmax(y_final[i][0][0])==1:
+            #print("T")
+            if np.argmax(y_final[i][0][0])==1:
                 correct_T=correct_T+1
             else:
                 uncorrect_T=uncorrect_T+1
         if y_real[i][0]==4:
-            print("V")
-            if len(y_final[i][0][0])==3 and np.argmax(y_final[i][0][0])==2:
+            #print("V")
+            if np.argmax(y_final[i][0][0])==2:
                 correct_V=correct_V+1
             else:
                 uncorrect_V=uncorrect_V+1
     print("H: ", str(correct_H)+"/"+str(correct_H+uncorrect_H))
-    print("AC: ", str(correct_AC)+"/"+str(correct_AC+uncorrect_AC))
+    print("AC:", str(correct_AC)+"/"+str(correct_AC+uncorrect_AC))
     print("S: ", str(correct_S)+"/"+str(correct_S+uncorrect_S))
     print("T: ", str(correct_T)+"/"+str(correct_T+uncorrect_T))
     print("V: ", str(correct_V)+"/"+str(correct_V+uncorrect_V))
@@ -76,11 +76,11 @@ def giveLabel(y_final,y_tocompare,y_real,y_started):
 
 
 #Open the root model
-json_file = open("Nets/Softmax/HAC.json","r")
+json_file = open("Nets/Softmax/ACHS.json","r")
 model_json = json_file.read()
 json_file.close()
 model = model_from_json(model_json)
-model.load_weights("Nets/Softmax/HAC_w.h5")
+model.load_weights("Nets/Softmax/ACHS_w.h5")
 sgd = optimizers.SGD(lr=0.0001, nesterov=True)
 model.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
@@ -89,14 +89,6 @@ model_json = json_file.read()
 json_file.close()
 modelbranch2 = model_from_json(model_json)
 modelbranch2.load_weights("Nets/Softmax/ACTV_w.h5")
-sgd = optimizers.SGD(lr=0.0001, nesterov=True)
-modelbranch2.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
-
-json_file = open("Nets/Softmax/ACHS.json","r")
-model_json = json_file.read()
-json_file.close()
-modelbranch2 = model_from_json(model_json)
-modelbranch2.load_weights("Nets/Softmax/ACHS_w.h5")
 sgd = optimizers.SGD(lr=0.0001, nesterov=True)
 modelbranch2.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
@@ -121,7 +113,9 @@ y_started=[]
 
 #Eseguo test
 for i in range(0,x_test.shape[0]):
-    print(i)
+    if i%300 == 0:
+        print(i)
+
     y_final.append([])
     y_tocompare.append([])
     y_real.append([])
@@ -134,7 +128,7 @@ for i in range(0,x_test.shape[0]):
     if  maxposition==0: #somiglianza con AC
         y_final[i].append(modelbranch2.predict(x_temp))# predict for ACTV
     else :
-       y_final[i].append(y_start)
+        y_final[i].append(y_start)
     y_tocompare[i].append(modeltocompare.predict(x_temp))#previsione sul modello a 5 classi
     y_real[i].append(y_test[i])
 giveLabel(y_final,y_tocompare,y_real,y_started)
@@ -143,26 +137,3 @@ giveLabel(y_final,y_tocompare,y_real,y_started)
 #np.save("y_tocompare.npy",y_tocompare)
 #np.save("y_real.npy",y_real)
 #np.save("y_started.npy",y_started)
-
-
-
-
-
-
-
-
-
-#Valuto i risultati
-
-
-# Compute ROC curve and ROC area for each class
-#fpr = dict()
-#tpr = dict()
-#roc_auc = dict()
-#for i in range(n_classes):
-#    fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
-#    roc_auc[i] = auc(fpr[i], tpr[i])
-#
-## Compute micro-average ROC curve and ROC area
-#fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
-#roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
