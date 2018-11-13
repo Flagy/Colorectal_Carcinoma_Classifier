@@ -1,0 +1,68 @@
+{   
+	"CNN": {
+		"HAC": {
+			"n_classes":2,
+			"paths": {
+				"x_train": "dataset/H-AC/train/x_train.npy",
+				"y_train": "dataset/H-AC/train/y_train.npy",
+				"x_test": "dataset/H-AC/test/x_test.npy",
+				"y_test": "dataset/H-AC/test/y_test.npy"
+			}
+		},
+		"5classes": {
+			"n_classes":5,
+			"paths": {
+				"x_train": "database5/train/x_tot.npy",
+				"y_train": "database5/train/y_tot.npy",
+				"x_test": "database5/test/x_test_tot.npy",
+				"y_test": "database5/test/y_test_tot.npy"
+			}
+		},
+		"HAD": {
+			"n_classes":2,
+			"paths": {
+				"x_train": "dataset/H-AD/x_train.npy",
+				"y_train": "dataset/H-AD/y_train.npy",
+				"x_test": "dataset/H-AD/x_test.npy",
+				"y_test": "dataset/H-AD/y_test.npy"
+			}
+		},
+		"STV": {
+			"n_classes":3,
+			"paths": {
+				"x_train": "dataset/S-T-V/x_train.npy",
+				"y_train": "dataset/S-T-V/y_train.npy",
+				"x_test": "dataset/S-T-V/x_test.npy",
+				"y_test": "dataset/S-T-V/y_test.npy"
+			}
+		},
+		"HS": {
+			"n_classes":2,
+			"paths": {
+				"x_train": "dataset/HS/HS_x_train.npy",
+				"y_train": "dataset/HS/HS_y_train.npy",
+				"x_test": "dataset/HS/HS_x_test.npy",
+				"y_test": "dataset/HS/HS_y_test.npy"
+			}
+		},
+		"ACTV": {
+			"n_classes":3,
+			"paths": {
+				"x_train": "dataset/ACTV/ACTV_x_train.npy",
+				"y_train": "dataset/ACTV/ACTV_y_train.npy",
+				"x_test": "dataset/ACTV/ACTV_x_test.npy",
+				"y_test": "dataset/ACTV/ACTV_y_test.npy"
+			}
+		},
+		"ACHS": {
+			"n_classes":3,
+			"paths": {
+				"x_train": "dataset/ACHS/ACHS_x_train.npy",
+				"y_train": "dataset/ACHS/ACHS_y_train.npy",
+				"x_test": "dataset/ACHS/ACHS_x_test.npy",
+				"y_test": "dataset/ACHS/ACHS_y_test.npy"
+			}
+		}
+	}
+}
+		
