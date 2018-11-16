@@ -10,7 +10,7 @@ from keras import optimizers
 import os
 from Token import TOKEN
 
-os.chdir('../Nets/Softmax/')
+os.chdir('Nets/Softmax/')
 bot = telepot.Bot(TOKEN)
 API = 'https://api.telegram.org'
 url_bot = API +'/bot'+ TOKEN
