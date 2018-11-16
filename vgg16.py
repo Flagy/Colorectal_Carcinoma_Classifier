@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import sys
 import telepot
 from Token import TOKEN
-#import os
 
 class VGG16():
 
