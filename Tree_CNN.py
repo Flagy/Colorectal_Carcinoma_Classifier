@@ -3,8 +3,6 @@ from keras import optimizers
 import numpy as np
 import os
 
-os.chdir("C:/Users/super/OneDrive/Documenti/Project_bioinfo")
-
 class TREE_CNN(object):
 
 	def charge_model(self,param):
