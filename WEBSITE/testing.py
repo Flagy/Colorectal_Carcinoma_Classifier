@@ -17,46 +17,42 @@ from numpy import array
 from keras import backend as K
 import numpy as np
 import tensorflow as tf
+import os
 
+os.chdir('../')
 
 
 
 class Testing():
     def __init__(self):
 
-        #Open the root self.model
-        json_file = open("network/vgg16_HAC.json","r")
+########################################ROOT MODEL################################
+        json_file = open("Nets/Softmax/ACHS.json","r")
         model_json = json_file.read()
         json_file.close()
         self.model = model_from_json(model_json)
-        self.model.load_weights("network/vgg16_HAC_w.h5")
+        self.model.load_weights("Nets/Softmax/ACHS_w.h5"")
         self.model_graph = tf.get_default_graph()
-
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.model.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
-        json_file = open("network/HS.json","r")
-        model_json = json_file.read()
-        json_file.close()
-        self.modelbranch1 = model_from_json(model_json)
-        self.modelbranch1.load_weights("network/HS_w.h5")
-        self.modelbranch1_graph = tf.get_default_graph()
-        sgd = optimizers.SGD(lr=0.0001, nesterov=True)
-        self.modelbranch1.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
+##########################ACTV MOdel#########################################################
 
-        json_file = open("network/ACTV.json","r")
+        json_file = open("Nets/Softmax/ACTV.json","r")
         model_json = json_file.read()
         json_file.close()
         self.modelbranch2 = model_from_json(model_json)
-        self.modelbranch2.load_weights("network/ACTV_w.h5")
+        self.modelbranch2.load_weights("../Nets/Softmax/ACTV_w.h5")
         self.modelbranch2_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.modelbranch2.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
-        json_file = open("network/vgg16.json","r")
+
+        #############################5_classes model###########################################
+        json_file = open("Nets/Softmax/vgg16.json","r")
         model_json = json_file.read()
         json_file.close()
         self.modeltocompare = model_from_json(model_json)
-        self.modeltocompare.load_weights("network/vgg16.h5")
+        self.modeltocompare.load_weights("Nets/Softmax/vgg16_w.h55")
         self.modeltocompare_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.modeltocompare.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
@@ -64,25 +60,21 @@ class Testing():
 
 
 
-    def giveLabel(self,y_final,y_tocompare,y_started):
+    def giveLabel(self,y_final,y_tocompare,y_started,flag):
         dic={}
-        print(y_final[0][0])
-        quota=len(y_final[0][0])
         maxpos=np.argmax(y_final[0][0])
-        poscompare=np.argmax(y_tocompare[0][0])
-        if quota==3 and maxpos==0:
-            dic={"percentage":y_final[0][0][maxpos],"class":"AC"}
-            print(dic)
-            return(dic)
+        if flag==0 and maxpos==0:
+            return(dic={"percentage":y_final[0][0][maxpos],"class":"AC"})
 
-        if quota==2 and maxpos==0:
+
+        if flag==1 and maxpos==1:
             return({"percentage":y_final[0][0][maxpos],"class":"H"})
 
-        if quota==2 and maxpos==1:
+        if flag==1 and maxpos==2:
             return({"percentage":y_final[0][0][maxpos],"class":"S"})
-        if quota==3 and maxpos==1:
+        if flag==0 and maxpos==1:
             return({"percentage":y_final[0][0][maxpos],"class":"T"})
-        if quota==3 and maxpos==2:
+        if flag==0 and maxpos==2:
             return({"percentage":y_final[0][0][maxpos],"class":"V"})
 
 
@@ -92,6 +84,7 @@ class Testing():
         label=["AC","H","S","T","V"]
         print(img.shape)
         #y_start è la variabile temporanea che per ogni predict del self.modello root classifica l'immagine in H o AC
+        flag=[]
         y_final=[]#vettore che da root sottoclassifica specificamente l'immagine
         y_tocompare=[]#OUTPUT della classificazione per la rete a 5 classi
         y_started=[]
@@ -99,18 +92,19 @@ class Testing():
         img = np.expand_dims(img, axis=0)
         with self.model_graph.as_default():
             y_start=self.model.predict(img)
-            print(y_start[0][1])
-            y_started.append(y_start)
-        if  y_start[0][0]>y_start[0][1]: #somiglianza con AC
+        maxposition=np.argmax(y_start)#trovo la posizione del max in y_start
+        if  maxposition==0: #somiglianza con AC
             with self.modelbranch2_graph.as_default():
-                y_final.append(self.modelbranch2.predict(img))
+                y_final.append(self.modelbranch2.predict(img))#ACTV prediction
+            flag=0
         else:
-            with self.modelbranch1_graph.as_default():
-                y_final.append(self.modelbranch1.predict(img))
+            y_finel.append(y_start)
+            flag=1
         with self.modeltocompare_graph.as_default():
-            y_tocompare.append(self.modeltocompare.predict(img))
-        print(y_final[0][0])
+            y_tocompare.append(self.modeltocompare.predict(img))#5_classes model prediction
+        #Param 1 give the prediction for the 5_classes model
         if param=="1":
             return({"percentage":y_tocompare[0][0][np.argmax(y_tocompare[0][0])],"class":label[np.argmax(y_tocompare[0][0])]})
+        #Other params perform prediction on the tree CNN model
         else:
-            return self.giveLabel(y_final,y_tocompare,y_started)
+            return self.giveLabel(y_final,y_tocompare,y_started,flag)
