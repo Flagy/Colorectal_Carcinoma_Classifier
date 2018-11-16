@@ -6,9 +6,6 @@ Created on Thu Oct 25 09:46:49 2018
 """
 
 from vgg16 import VGG16
-#import os
-
-#os.chdir("C:/Users/super/OneDrive/Documenti/Project_bioinfo")
 
 
 VGG16('5classes').start('fulltraining','softmax')
