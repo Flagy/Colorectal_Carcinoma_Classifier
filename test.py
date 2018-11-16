@@ -11,8 +11,6 @@ from image_loading import LoadingData
 import numpy as np
 import os
 
-os.chdir('../')
-
 def giveLabel(y_final,y_real):
     correct_AC=0
     correct_H=0
