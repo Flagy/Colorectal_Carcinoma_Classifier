@@ -12,8 +12,6 @@ import telepot
 from Token import TOKEN
 #import os
 
-#os.chdir("C:/Users/super/OneDrive/Documenti/Project_bioinfo")
-
 class VGG16():
 
     def __init__(self,model_name, n_classes=2):
