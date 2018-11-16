@@ -16,8 +16,6 @@ from keras import backend as K
 import numpy as np
 
 act_func = 'Sigmoid' #'Softmax'
-#Set working directory
-os.chdir("C:/Users/super/OneDrive/Documenti/Project_bioinfo")
 #Open the model, the model corresponds to the root node.
 json_file = open("Nets/"+act_func+"/HAC.json","r")
 model_json = json_file.read()
