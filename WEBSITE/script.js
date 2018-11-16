@@ -37,10 +37,10 @@ function predictData(){
     console.log(ctx);
     var xhr = new XMLHttpRequest();//open HTTP request
     if(text=="5 classes VGG16"){
-      xhr.open("POST", "http://192.168.56.1:8080/1/");
+      xhr.open("POST", "http://192.168.43.96:8080/1/");
 }
     else{
-      xhr.open("POST", "http://192.168.56.1:8080/0/");
+      xhr.open("POST", "http://192.168.43.96:8080/0/");
 }
 //changing url based on user choice
   xhr.onload = function () {//when post procedure is finished...
@@ -57,7 +57,7 @@ function predictData(){
     title.innerHTML=result.typeofnet;
     y.appendChild(title);
     var h1=document.createElement("H3");
-    h1.innerHTML="The network obtained an accuracy of "+result.percentage +" and classified your image in class "+result.class;
+    h1.innerHTML="The network obtained an accuracy of " + result.percentage + " and classified your image in class "+result.class;
     y.appendChild(h1);
 
 };

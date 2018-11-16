@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 import keras
 from keras import optimizers
-from keras.models import Model, Sequential
+from keras.models import Model
 from image_loading import LoadingData
-from keras.layers import Dropout, Flatten, Dense,GlobalAveragePooling2D
-from keras import applications
+from keras.layers import Dropout, Dense, GlobalAveragePooling2D
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import matplotlib.pyplot as plt
-import json
 import sys
 import telepot
 from Token import TOKEN
@@ -92,7 +90,7 @@ class VGG16():
         fig = plt.figure()
         plt.plot(history.history['acc'])
         plt.plot(history.history['val_acc'])
-        plt.title(self.model_name+' accuracy')
+        plt.title(self.model_name+' '+self.activ_func+' accuracy')
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
@@ -106,7 +104,7 @@ class VGG16():
         fig = plt.figure()
         plt.plot(history.history['loss'])
         plt.plot(history.history['val_loss'])
-        plt.title(self.model_name+' model loss')
+        plt.title(self.model_name+' '+self.activ_func+' model loss')
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
@@ -137,37 +135,27 @@ class VGG16():
         return x
 
 
-    def start(self,data,param='fulltraining',activ_func='both'):
-        if data:
-            #caricamento dei dati
-            load=LoadingData("json",self.model_name)
-            print(load.n_classes)
-            self.n_classes=load.n_classes
-            x_train=load.x_train
-            print(np.shape(x_train))
-            y_train=load.y_train
-            x_test=load.x_test
-            y_test=load.y_test
-            #caricamento del modello
-            model_base=self.modelLoading()
-            #caricamento del modello output
-            predictions=self.creation(model_base,activ_func)
-            model = Model(inputs=model_base.input, outputs=predictions)
-            self.easyCompile(model_base.layers,model,param)
-
-
-            #dataaugmntation and fit
-            if data=='aug':
-                self.TG_bot.sendMessage(self.chat_id,"Data augmentation is enabled")
-                datagen=self.dataaug()
-                datagen.fit(x_train)
-                history=model.fit_generator(datagen.flow(x_train, y_train, batch_size=32),steps_per_epoch=len(x_train)/32, epochs=100,callbacks=self.callbacks())
-            elif data=='no_aug':
-                self.TG_bot.sendMessage(self.chat_id,"Data augmentation is disabled")
-                history=model.fit(x_train, y_train, batch_size=32, epochs=100, verbose=1, callbacks=self.callbacks(), validation_split=0.2, shuffle=True)
+    def start(self,param='fulltraining',activ_func='both'):
+        #caricamento dei dati
+        self.activ_func = activ_func
+        load=LoadingData("json",self.model_name)
+        print(load.n_classes)
+        self.n_classes=load.n_classes
+        x_train=load.x_train
+        print(np.shape(x_train))
+        y_train=load.y_train
+        x_test=load.x_test
+        y_test=load.y_test
+        #caricamento del modello
+        model_base=self.modelLoading()
+        #caricamento del modello output
+        predictions=self.creation(model_base,activ_func)
+        model = Model(inputs=model_base.input, outputs=predictions)
+        self.easyCompile(model_base.layers,model,param)
+        self.TG_bot.sendMessage(self.chat_id,"Data augmentation is disabled")
+        history=model.fit(x_train, y_train, batch_size=32, epochs=100, verbose=1, callbacks=self.callbacks(), validation_split=0.2, shuffle=True)
         #datavisualization
-            #score = model.evaluate(x_test, y_test, batch_size = 32)
-            self.savemodel(model,activ_func)
-            self.plotAccLoss(history)
-        else:
-            print("Insert aug please")
+        #score = model.evaluate(x_test, y_test, batch_size = 32)
+        self.savemodel(model,activ_func)
+        self.plotAccLoss(history)
+        self.TG_bot.sendMessage("Model evaluation: ",str(model.evaluate(x_test,y_test,batch_size=16)))

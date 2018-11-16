@@ -10,7 +10,7 @@ from keras import optimizers
 import os
 from Token import TOKEN
 
-os.chdir('../Nets')
+os.chdir('../Nets/Softmax/')
 bot = telepot.Bot(TOKEN)
 API = 'https://api.telegram.org'
 url_bot = API +'/bot'+ TOKEN
@@ -44,7 +44,7 @@ def vgg16_pred(img):
 
 
 def TreeCNN_pred(img):
-    model = charge_model('HAC')
+    model = charge_model('ACHS')
     data = np.asarray(img, dtype="uint8")
     image_batch = np.expand_dims(data, axis=0)
     pred = model.predict(image_batch)
@@ -64,18 +64,7 @@ def TreeCNN_pred(img):
 	        print(pred,acc_brench1,acc_brench2,accuracy)
 	        accuracy = str("{0:.2f}".format((accuracy*100)))+'%'
 	    elif np.argmax(pred) == 1:
-	        print("Charging HS model")
-	        model = charge_model('HS')
-	        pred = model.predict(image_batch)
-	        prognosis = label_HS[np.argmax(pred)]
-	        acc_brench2 = np.max(pred)
-	        #Law of total probability
-	        accuracy = acc_brench1*acc_brench2
-			#It's true that other terms should be added but they should
-	        #be neglictables and above all in this way it's more preservative
-	        accuracy = str("{0:.2f}".format((accuracy*100)))+'%'
-	        print(pred,acc_brench1,acc_brench2,accuracy)
-	        accuracy = str("{0:.2f}".format((np.max(pred)*100)))+'%'
+	    	print("Prediction: H with accuracy",str())
     except:
     	raise AssertionError("Unexpected value of 'prediction'!", str(pred))
     return(prognosis,accuracy)

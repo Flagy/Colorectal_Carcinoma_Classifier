@@ -12,6 +12,7 @@ class LoadingData():
 		self.y_test=[]
 		self.x_train=[]
 		self.y_train=[]
+		print('calling on choice')
 		self.onChoice()
 
 
@@ -23,6 +24,7 @@ class LoadingData():
 			return conf
 
 	def onChoice(self):
+		print('in onchoice')
 		if self.type=="json":
 			conf= self.json_reading("loading_conf.json")
 			try:
@@ -44,6 +46,7 @@ class LoadingData():
 
 
 	def datahere(self,conf):
+		print('datahere')
 		try:
 			self.x_train = np.load(conf['paths']['x_train'])
 			self.x_train = np.array(self.x_train)
@@ -52,7 +55,7 @@ class LoadingData():
 			self.x_test = np.array(self.x_test)
 			self.y_test = np.load(conf['paths']['y_test'])
 		except:
-			print("Problems with importation of data")
+			raise AssertionError ("Problems with importation of data")
 		print("All Data Loaded")
 
 

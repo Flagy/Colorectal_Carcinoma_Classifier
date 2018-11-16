@@ -14,13 +14,6 @@ import matplotlib.image as mpimg
 from sys import argv
 
 
-
-
-
-
-
-
-
 class NN(object):
     exposed = True
     def GET (self,*uri,**args):
@@ -57,16 +50,9 @@ class NN(object):
         return (json.dumps(data))
 
 
-
-
-
-
-
-
-
 if __name__ == '__main__':
     #getting path of the site as first argument in shell
-    file_path=argv[1]
+    file_path='C:/Users/super/OneDrive/Documenti/GitHub/Colorectal_Carcinoma_Classifier/WEBSITE/'
     test=Testing()
     conf = {
 		'/': {
@@ -78,7 +64,7 @@ if __name__ == '__main__':
 		}
 	}
     cherrypy.tree.mount(NN(), '/', conf)
-    cherrypy.config.update({'server.socket_host': '192.168.56.1'})
+    cherrypy.config.update({'server.socket_host': '192.168.43.96'})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.engine.start()
     cherrypy.engine.block()
