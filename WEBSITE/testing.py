@@ -27,11 +27,11 @@ class Testing():
     def __init__(self):
 
 ########################################ROOT MODEL################################
-        json_file = open("Nets/Softmax/ACHS.json","r")
+        json_file = open("Nets/Sigmoid/ACHS.json","r")
         model_json = json_file.read()
         json_file.close()
         self.model = model_from_json(model_json)
-        self.model.load_weights("Nets/Softmax/ACHS_w.h5")
+        self.model.load_weights("Nets/Sigmoid/ACHS_w.h5")
         self.model_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.model.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
@@ -48,11 +48,11 @@ class Testing():
         self.modelbranch2.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
         #############################5_classes model###########################################
-        json_file = open("Nets/Softmax/vgg16.json","r")
+        json_file = open("Nets/Softmax/5classes.json","r")
         model_json = json_file.read()
         json_file.close()
         self.modeltocompare = model_from_json(model_json)
-        self.modeltocompare.load_weights("Nets/Softmax/vgg16_w.h55")
+        self.modeltocompare.load_weights("Nets/Softmax/5classes_w.h55")
         self.modeltocompare_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.modeltocompare.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
