@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Wed Oct  3 11:24:38 2018
@@ -31,7 +32,7 @@ class Testing():
         model_json = json_file.read()
         json_file.close()
         self.model = model_from_json(model_json)
-        self.model.load_weights("Nets/Sigmoid/ACHS_w.h5"")
+        self.model.load_weights("Nets/Sigmoid/ACHS_w.h5")
         self.model_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.model.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
@@ -42,7 +43,7 @@ class Testing():
         model_json = json_file.read()
         json_file.close()
         self.modelbranch2 = model_from_json(model_json)
-        self.modelbranch2.load_weights("../Nets/Softmax/ACTV_w.h5")
+        self.modelbranch2.load_weights("Nets/Softmax/ACTV_w.h5")
         self.modelbranch2_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.modelbranch2.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
@@ -52,7 +53,7 @@ class Testing():
         model_json = json_file.read()
         json_file.close()
         self.modeltocompare = model_from_json(model_json)
-        self.modeltocompare.load_weights("Nets/Softmax/5classes_w.h55")
+        self.modeltocompare.load_weights("Nets/Softmax/5classes_w.h5")
         self.modeltocompare_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.modeltocompare.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
@@ -64,7 +65,7 @@ class Testing():
         dic={}
         maxpos=np.argmax(y_final[0][0])
         if flag==0 and maxpos==0:
-            return(dic={"percentage":y_final[0][0][maxpos],"class":"AC"})
+            return({"percentage":y_final[0][0][maxpos],"class":"AC"})
 
 
         if flag==1 and maxpos==1:

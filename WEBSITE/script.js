@@ -1,4 +1,4 @@
-
+var ip="192.168.1.93"
 function getBase64Image(img) {
 
   var canvas=document.getElementById("c"); //get canvas in the main page
@@ -37,10 +37,10 @@ function predictData(){
     console.log(ctx);
     var xhr = new XMLHttpRequest();//open HTTP request
     if(text=="5 classes VGG16"){
-      xhr.open("POST", "http://192.168.43.96:8080/1/");
+      xhr.open("POST", "http://"+ip+":8080/1/");
 }
     else{
-      xhr.open("POST", "http://192.168.43.96:8080/0/");
+      xhr.open("POST", "http://"+ip+":8080/0/");
 }
 //changing url based on user choice
   xhr.onload = function () {//when post procedure is finished...
