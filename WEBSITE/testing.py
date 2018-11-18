@@ -31,7 +31,7 @@ class Testing():
         model_json = json_file.read()
         json_file.close()
         self.model = model_from_json(model_json)
-        self.model.load_weights("Nets/Softmax/ACHS_w.h5"")
+        self.model.load_weights("Nets/Softmax/ACHS_w.h5")
         self.model_graph = tf.get_default_graph()
         sgd = optimizers.SGD(lr=0.0001, nesterov=True)
         self.model.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
