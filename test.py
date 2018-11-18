@@ -68,11 +68,11 @@ def giveLabel(y_final,y_real):
     print("Total Accuracy: ",str((correct_AC_5+correct_H_5+correct_S_5+correct_T_5+correct_V_5)/len(y_real)))    
 
 #Open the root model
-json_file = open("Nets/Softmax/ACHS.json","r")
+json_file = open("Nets/Sigmoid/ACHS.json","r")
 model_json = json_file.read()
 json_file.close()
 model = model_from_json(model_json)
-model.load_weights("Nets/Softmax/ACHS_w.h5")
+model.load_weights("Nets/Sigmoid/ACHS_w.h5")
 sgd = optimizers.SGD(lr=0.0001, nesterov=True)
 model.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
@@ -85,11 +85,11 @@ sgd = optimizers.SGD(lr=0.0001, nesterov=True)
 modelbranch2.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
 #loading 5 classes model
-json_file = open("Nets/Softmax/vgg16.json","r")
+json_file = open("Nets/Softmax/5classes.json","r")
 model_json = json_file.read()
 json_file.close()
 modeltocompare = model_from_json(model_json)
-modeltocompare.load_weights("Nets/Softmax/vgg16_w.h5")
+modeltocompare.load_weights("Nets/Softmax/5classes_w.h5")
 sgd = optimizers.SGD(lr=0.0001, nesterov=True)
 modeltocompare.compile(optimizer=sgd,loss = 'sparse_categorical_crossentropy', metrics= ['accuracy'])
 
