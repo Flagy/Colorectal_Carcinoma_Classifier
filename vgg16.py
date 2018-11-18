@@ -10,9 +10,6 @@ import matplotlib.pyplot as plt
 import sys
 import telepot
 from Token import TOKEN
-#import os
-
-#os.chdir("C:/Users/super/OneDrive/Documenti/Project_bioinfo")
 
 class VGG16():
 
@@ -157,5 +154,5 @@ class VGG16():
         #datavisualization
         #score = model.evaluate(x_test, y_test, batch_size = 32)
         self.savemodel(model,activ_func)
-        #self.plotAccLoss(history)
-        #self.TG_bot.sendMessage(self.chat_id, "Model evaluation: ",str(model.evaluate(x_test,y_test,batch_size=16)))
+        self.plotAccLoss(history)
+        self.TG_bot.sendMessage(self.chat_id, "Model evaluation: ",str(model.evaluate(x_test,y_test,batch_size=16)))
