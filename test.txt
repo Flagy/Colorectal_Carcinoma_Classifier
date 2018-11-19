@@ -1,0 +1,28 @@
+activation function is: Softmax T is:  0.7
+Classification: AC 	Param: AC
+The tree grows vertically, AC is joint to the class AC
+Classification: H 	Param: H
+The tree grows vertically, H is joint to the class H
+Classification: H 	Param: S
+The tree grows orizontally, S is a new child node
+Classification: AC 	Param: T
+The tree grows vertically, T is joint to the class AC
+Classification: AC 	Param: V
+The tree grows vertically, V is joint to the class AC
+
+
+Prestazioni TREE-CNN:
+AC: 397/1000
+H:  928/1000
+S:  451/500
+T:  291/561
+V:  482/558
+Total Accuracy:  0.7043382149765128 
+
+Prestazioni VGG16:
+AC: 498/1000
+H:  953/1000
+S:  412/500
+T:  438/561
+V:  531/558
+Total Accuracy:  0.7825366123238464
