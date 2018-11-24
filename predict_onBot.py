@@ -10,14 +10,14 @@ from keras import optimizers
 import os
 from Token import TOKEN
 
-os.chdir('Nets/Softmax/')
+os.chdir('Nets/')
 bot = telepot.Bot(TOKEN)
 API = 'https://api.telegram.org'
 url_bot = API +'/bot'+ TOKEN
 url_files = API + '/file/bot'+ TOKEN
-label_vgg16 = ['AC','H','S','T','V']
+label_5classes = ['AC','H','S','T','V']
+label_ACHS = ['AC','H','S']
 label_ACTV = ['AC','T','V']
-label_HS = ['H','S']
 decided = False
 
 
@@ -35,8 +35,8 @@ def charge_model(param):
     return model
 
 
-def vgg16_pred(img):
-    model = charge_model('vgg16')
+def tot_classes_pred(img):
+    model = charge_model('Softmax/5classes')
     data = np.asarray(img, dtype="uint8")
     image_batch = np.expand_dims(data, axis=0)
     prediction = model.predict(image_batch)
@@ -44,38 +44,28 @@ def vgg16_pred(img):
 
 
 def TreeCNN_pred(img):
-    model = charge_model('HAC')
+    model = charge_model('Softmax/ACHS')
     data = np.asarray(img, dtype="uint8")
     image_batch = np.expand_dims(data, axis=0)
     pred = model.predict(image_batch)
     print(pred)
-    acc_brench1 = np.max(pred)
+    acc_branch1 = np.max(pred)
     try:
-	    if np.argmax(pred) == 0:
+	    if np.argmax(pred) != 0:
+	        prognosis = label_ACHS[np.argmax(pred)]
+	        accuracy = str("{0:.2f}".format((acc_branch1*100)))+'%'
+	    else:
 	        print("Charging ACTV model")
-	        model = charge_model('ACTV')
-	        pred = model.predict(image_batch)
-	        prognosis = label_ACTV[np.argmax(pred)]
-	        acc_brench2 = np.max(pred)
+	        model = charge_model('Softmax/ACTV')
+	        pred2 = model.predict(image_batch)
+	        prognosis = label_ACTV[np.argmax(pred2)]
+	        acc_branch2 = np.max(pred2)
 	        #Law of total probability
-	        accuracy = acc_brench1*acc_brench2 
-	        #It's true that other terms should be added but they should
-	        #be neglictables and above all in this way it's more preservative
-	        print(pred,acc_brench1,acc_brench2,accuracy)
-	        accuracy = str("{0:.2f}".format((accuracy*100)))+'%'
-	    elif np.argmax(pred) == 1:
-	        print("Charging HS model")
-	        model = charge_model('HS')
-	        pred = model.predict(image_batch)
-	        prognosis = label_HS[np.argmax(pred)]
-	        acc_brench2 = np.max(pred)
-	        #Law of total probability
-	        accuracy = acc_brench1*acc_brench2
+	        accuracy = acc_branch1*acc_branch2
 			#It's true that other terms should be added but they should
 	        #be neglictables and above all in this way it's more preservative
 	        accuracy = str("{0:.2f}".format((accuracy*100)))+'%'
-	        print(pred,acc_brench1,acc_brench2,accuracy)
-	        accuracy = str("{0:.2f}".format((np.max(pred)*100)))+'%'
+	        print('Prediction1:',pred,'\nPrediction2:',pred2,'\nacc_branch1:',acc_branch1,'\nacc_branch2:',acc_branch2,'\nTot accuracy:',accuracy)
     except:
     	raise AssertionError("Unexpected value of 'prediction'!", str(pred))
     return(prognosis,accuracy)
@@ -98,10 +88,10 @@ def on_chat_message(msg):
         #img.show()
         print('Callback query:',query_id, from_id, query_data)
         try:
-	        if query_data == 'vgg16':
-	            result = vgg16_pred(img)
+	        if query_data == '5classes':
+	            result = tot_classes_pred(img)
 	            print(result)
-	            prognosis = label_vgg16[np.argmax(result)]
+	            prognosis = label_5classes[np.argmax(result)]
 	            accuracy = str("{0:.2f}".format((np.max(result)*100)))+'%'
 	            bot.sendMessage(chat_id,"In my opinion this is class "+prognosis+' whit accuracy of '+accuracy)
 	        elif query_data == 'TreeCNN':
@@ -111,7 +101,7 @@ def on_chat_message(msg):
             raise AssertionError("Unexpected value of 'query_data'!", query_data)
     else:
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text = 'VGG16 for 5 classes',callback_data = 'vgg16')],
+            [InlineKeyboardButton(text = '5classes for 5 classes',callback_data = '5classes')],
             [InlineKeyboardButton(text = 'Tree CNN',callback_data = 'TreeCNN')]])
         bot.sendMessage(chat_id, "Choose a net and send a picture", reply_markup = keyboard)
 
