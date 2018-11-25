@@ -21,3 +21,5 @@ HOW TO LAUNCH:
   2. Launch server.py 
   3. go on "ipaddress:8080/index.html" where ipaddress is the one described in point 1
   4. enjoy the service
+  
+  IF ERROR about Cross Domain Origin apperas, please install CORS on Chrome and enable it to solve the problem
