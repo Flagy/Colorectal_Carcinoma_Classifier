@@ -1,0 +1,6 @@
+In this folder there should be the followin files:
+
+HS_x_test.npy
+HS_x_train.npy
+HS_y_test.npy
+HS_y_train.npy

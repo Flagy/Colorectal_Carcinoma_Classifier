@@ -1,0 +1,6 @@
+In this folder there should be the followin files:
+
+ACHS_x_test.npy
+ACHS_x_train.npy
+ACHS_y_test.npy
+ACHS_y_train.npy

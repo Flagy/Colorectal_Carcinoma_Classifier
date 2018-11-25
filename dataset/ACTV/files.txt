@@ -1,0 +1,6 @@
+In this folder there should be the followin files:
+
+ACTV_x_test.npy
+ACTV_x_train.npy
+ACTV_y_test.npy
+ACTV_y_train.npy

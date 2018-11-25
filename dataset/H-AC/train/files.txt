@@ -1,0 +1,4 @@
+In this folder there should be the followin files:
+
+x_train.npy
+y_train.npy
